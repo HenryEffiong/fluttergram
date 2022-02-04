@@ -18,14 +18,13 @@ import 'models/user.dart';
 final auth = FBA.FirebaseAuth.instance;
 final googleSignIn = GoogleSignIn();
 final ref = FirebaseFirestore.instance.collection('insta_users');
-final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
 User currentUserModel;
 
 Future<void> main() async {
-
-  WidgetsFlutterBinding.ensureInitialized(); // after upgrading flutter this is now necessary
+  WidgetsFlutterBinding
+      .ensureInitialized(); // after upgrading flutter this is now necessary
 
   runApp(Fluttergram());
 }
@@ -41,12 +40,12 @@ Future<Null> _ensureLoggedIn(BuildContext context) async {
   }
 
   if (auth.currentUser == null) {
-
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser
-        .authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
-    final FBA.GoogleAuthCredential credential = FBA.GoogleAuthProvider.credential(
+    final FBA.GoogleAuthCredential credential =
+        FBA.GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
@@ -65,24 +64,21 @@ Future<Null> _silentLogin(BuildContext context) async {
 
   if (await auth.currentUser == null && user != null) {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser
-        .authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
-
-    final FBA.GoogleAuthCredential credential = FBA.GoogleAuthProvider.credential(
+    final FBA.GoogleAuthCredential credential =
+        FBA.GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
     await auth.signInWithCredential(credential);
   }
-
-
 }
 
 Future<Null> _setUpNotifications() async {
   if (Platform.isAndroid) {
-
     _firebaseMessaging.getToken().then((token) {
       print("Firebase Messaging Token: " + token);
 
@@ -245,8 +241,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                   child: Uploader(),
                 ),
-                Container(
-                    color: Colors.white, child: ActivityFeedPage()),
+                Container(color: Colors.white, child: ActivityFeedPage()),
                 Container(
                     color: Colors.white,
                     child: ProfilePage(
@@ -328,9 +323,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Firebase.initializeApp().then((_) {
-     setState(() {
-       firebaseInitialized= true;
-     });
+      setState(() {
+        firebaseInitialized = true;
+      });
     });
     pageController = PageController();
   }
